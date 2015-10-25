@@ -7,6 +7,7 @@ package controladorsocket;
 
 import controladorsocket.socket.TCPClientSocket;
 import controladorsocket.socket.UDPClientSocket;
+import java.awt.Color;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.logging.Level;
@@ -216,6 +217,7 @@ public class Menu extends javax.swing.JFrame {
                     tcpSocketAtuador.requestValue(sensorVal);
                     end = System.nanoTime();
                     text += end - start + "\r\n";
+                    System.out.println((end-start)+"");
                 } else {
                     erros++;
                 }

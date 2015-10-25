@@ -18,27 +18,27 @@ import java.net.UnknownHostException;
  * @author charles
  */
 public class UDPClientSocket {
-
+    
     private String serverHostname;
     private int serverPort;
-
+    
     public UDPClientSocket(String serverHostname, int serverPort) {
         this.serverHostname = serverHostname;
         this.serverPort = serverPort;
     }
-
+    
     public String requestValue(String value) throws Exception {
         String receiveMessage = null;
         try {
             DatagramSocket clientSocket = new DatagramSocket();
             InetAddress IPAddress = InetAddress.getByName(serverHostname);
             byte[] sendData = new byte[10];
-            byte[] receiveData = new byte[10]; 
+            byte[] receiveData = new byte[10];            
             sendData = value.getBytes();
             DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, IPAddress, serverPort);
             clientSocket.send(sendPacket);
             DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
-           
+            clientSocket.setSoTimeout(2000);
             clientSocket.receive(receivePacket);
             receiveMessage = new String(receivePacket.getData());
             clientSocket.close();
