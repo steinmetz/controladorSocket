@@ -237,7 +237,7 @@ public class Menu extends javax.swing.JFrame {
             long start, end;
             while (running) {
                 start = System.nanoTime();
-                String sensorVal = udpSocketAtuador.requestValue("0");
+                String sensorVal = udpSocketSensor.requestValue("0");
                 if (sensorVal != null && sensorVal.trim().length() > 0) {
                     udpSocketAtuador.requestValue(sensorVal);
                     end = System.nanoTime();
@@ -251,6 +251,7 @@ public class Menu extends javax.swing.JFrame {
             }
             save(text + "\r\n\r\n" + erros, "upd.txt");
         } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
