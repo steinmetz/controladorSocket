@@ -8,6 +8,7 @@ package controladorsocket;
 import controladorsocket.socket.TCPClientSocket;
 import controladorsocket.socket.UDPClientSocket;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -48,6 +49,7 @@ public class Menu extends javax.swing.JFrame {
         radTCP = new javax.swing.JRadioButton();
         radUDP = new javax.swing.JRadioButton();
         btn = new javax.swing.JButton();
+        txtTrasnmissoes = new javax.swing.JLabel();
 
         jLabel2.setText("jLabel2");
 
@@ -55,19 +57,19 @@ public class Menu extends javax.swing.JFrame {
 
         jLabel1.setText("IP Sensor");
 
-        edtIPSensor.setText("192.168.0.102");
+        edtIPSensor.setText("187.183.5.216");
 
         jLabel3.setText("Porta");
 
-        edtPortaSensor.setText("9000");
+        edtPortaSensor.setText("1001");
 
         jLabel4.setText("IP Atuador");
 
-        edtIPAtuador.setText("192.168.0.105");
+        edtIPAtuador.setText("187.183.5.216");
 
         jLabel5.setText("Porta");
 
-        edtPortaAtuador.setText("9000");
+        edtPortaAtuador.setText("1003");
 
         buttonGroup1.add(radTCP);
         radTCP.setSelected(true);
@@ -88,6 +90,8 @@ public class Menu extends javax.swing.JFrame {
             }
         });
 
+        txtTrasnmissoes.setText("0");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -95,12 +99,6 @@ public class Menu extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(81, 81, 81)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(radTCP)
-                        .addGap(28, 28, 28)
-                        .addComponent(radUDP)
-                        .addGap(18, 18, 18)
-                        .addComponent(btn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel4)
@@ -117,7 +115,18 @@ public class Menu extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel3)
-                            .addComponent(edtPortaSensor, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(edtPortaSensor, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(radTCP)
+                        .addGap(28, 28, 28)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(txtTrasnmissoes)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(radUDP)
+                                .addGap(18, 18, 18)
+                                .addComponent(btn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
                 .addGap(99, 99, 99))
         );
         layout.setVerticalGroup(
@@ -144,7 +153,9 @@ public class Menu extends javax.swing.JFrame {
                     .addComponent(radTCP)
                     .addComponent(radUDP)
                     .addComponent(btn))
-                .addContainerGap(136, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(txtTrasnmissoes)
+                .addContainerGap(102, Short.MAX_VALUE))
         );
 
         pack();
@@ -157,6 +168,7 @@ public class Menu extends javax.swing.JFrame {
     private void btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActionPerformed
 
         if (btn.getText().equals("Start")) {
+             txtTrasnmissoes.setText( "0" );
             running = true;
             Runnable run = null;
             if (radTCP.isSelected()) {
@@ -194,10 +206,25 @@ public class Menu extends javax.swing.JFrame {
         TCPClientSocket tcpSocketSensor = new TCPClientSocket(edtIPSensor.getText(), Integer.parseInt(edtPortaSensor.getText()));
         TCPClientSocket tcpSocketAtuador = new TCPClientSocket(edtIPAtuador.getText(), Integer.parseInt(edtPortaAtuador.getText()));
         try {
+            String text = "";
+            int erros = 0;
+            long start, end;
             while (running) {
-                tcpSocketAtuador.requestValue(tcpSocketSensor.requestValue("0"));
+                start = System.nanoTime();
+                String sensorVal = tcpSocketSensor.requestValue("0");
+                if (sensorVal != null && sensorVal.trim().length() > 0) {
+                    tcpSocketAtuador.requestValue(sensorVal);
+                    end = System.nanoTime();
+                    text += end - start + "\r\n";
+                } else {
+                    erros++;
+                }
+                int cont = (Integer.parseInt(txtTrasnmissoes.getText()));
+                cont++;
+                txtTrasnmissoes.setText(  cont+"" );
             }
-        } catch (IOException ex) { 
+            save(text + "\r\n\r\n" + erros, "tcp.txt");
+        } catch (IOException ex) {
         }
     }
 
@@ -205,11 +232,39 @@ public class Menu extends javax.swing.JFrame {
         UDPClientSocket udpSocketSensor = new UDPClientSocket(edtIPSensor.getText(), Integer.parseInt(edtPortaSensor.getText()));
         UDPClientSocket udpSocketAtuador = new UDPClientSocket(edtIPAtuador.getText(), Integer.parseInt(edtPortaAtuador.getText()));
         try {
+            String text = "";
+            int erros = 0;
+            long start, end;
             while (running) {
-                udpSocketAtuador.requestValue(udpSocketSensor.requestValue("0"));
+                start = System.nanoTime();
+                String sensorVal = udpSocketAtuador.requestValue("0");
+                if (sensorVal != null && sensorVal.trim().length() > 0) {
+                    udpSocketAtuador.requestValue(sensorVal);
+                    end = System.nanoTime();
+                    text += end - start + "\r\n";
+                } else {
+                    erros++;
+                }
+                int cont = (Integer.parseInt(txtTrasnmissoes.getText()));
+                cont++;
+                txtTrasnmissoes.setText(  cont+"" );
             }
+            save(text + "\r\n\r\n" + erros, "upd.txt");
         } catch (Exception e) {
         }
+    }
+
+    public void save(String text, String filename) {
+        PrintWriter writer;
+        String path = "/home/charles/Dropbox/SCA/";
+        try {
+            writer = new PrintWriter(path + filename, "UTF-8");
+            writer.println(text);
+            writer.close();
+        } catch (Exception ex) {
+            Logger.getLogger(TCPClientSocket.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }
 
     /**
@@ -261,5 +316,6 @@ public class Menu extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JRadioButton radTCP;
     private javax.swing.JRadioButton radUDP;
+    private javax.swing.JLabel txtTrasnmissoes;
     // End of variables declaration//GEN-END:variables
 }

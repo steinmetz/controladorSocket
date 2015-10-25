@@ -35,13 +35,6 @@
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace min="-2" pref="81" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" attributes="0">
-                      <Component id="radTCP" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
-                      <Component id="radUDP" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Component id="btn" max="32767" attributes="0"/>
-                  </Group>
                   <Group type="102" alignment="0" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="jLabel4" alignment="0" min="-2" max="-2" attributes="0"/>
@@ -63,6 +56,21 @@
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
                           <Component id="edtPortaSensor" min="-2" pref="60" max="-2" attributes="0"/>
+                      </Group>
+                  </Group>
+                  <Group type="102" alignment="0" attributes="0">
+                      <Component id="radTCP" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" attributes="0">
+                              <Component id="txtTrasnmissoes" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                          </Group>
+                          <Group type="102" attributes="0">
+                              <Component id="radUDP" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Component id="btn" max="32767" attributes="0"/>
+                          </Group>
                       </Group>
                   </Group>
               </Group>
@@ -99,7 +107,9 @@
                   <Component id="radUDP" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="btn" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace pref="136" max="32767" attributes="0"/>
+              <EmptySpace type="separate" max="-2" attributes="0"/>
+              <Component id="txtTrasnmissoes" min="-2" max="-2" attributes="0"/>
+              <EmptySpace pref="102" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -112,7 +122,7 @@
     </Component>
     <Component class="javax.swing.JTextField" name="edtIPSensor">
       <Properties>
-        <Property name="text" type="java.lang.String" value="192.168.0.102"/>
+        <Property name="text" type="java.lang.String" value="187.183.5.216"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel3">
@@ -122,7 +132,7 @@
     </Component>
     <Component class="javax.swing.JTextField" name="edtPortaSensor">
       <Properties>
-        <Property name="text" type="java.lang.String" value="9000"/>
+        <Property name="text" type="java.lang.String" value="1001"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel4">
@@ -132,7 +142,7 @@
     </Component>
     <Component class="javax.swing.JTextField" name="edtIPAtuador">
       <Properties>
-        <Property name="text" type="java.lang.String" value="192.168.0.105"/>
+        <Property name="text" type="java.lang.String" value="187.183.5.216"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel5">
@@ -142,7 +152,7 @@
     </Component>
     <Component class="javax.swing.JTextField" name="edtPortaAtuador">
       <Properties>
-        <Property name="text" type="java.lang.String" value="9000"/>
+        <Property name="text" type="java.lang.String" value="1003"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JRadioButton" name="radTCP">
@@ -172,6 +182,11 @@
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnActionPerformed"/>
       </Events>
+    </Component>
+    <Component class="javax.swing.JLabel" name="txtTrasnmissoes">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="0"/>
+      </Properties>
     </Component>
   </SubComponents>
 </Form>
