@@ -5,6 +5,9 @@
  */
 package controladorsocket;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import controladorsocket.Message.Value;
 import controladorsocket.socket.TCPClientSocket;
 import controladorsocket.socket.UDPClientSocket;
 import java.awt.Color;
@@ -19,10 +22,7 @@ import java.util.logging.Logger;
  */
 public class Menu extends javax.swing.JFrame {
 
-    /**
-     * Creates new form Menu
-     */
-    public boolean running = false;
+    public boolean running = false; 
 
     public Menu() {
         initComponents();
@@ -51,6 +51,11 @@ public class Menu extends javax.swing.JFrame {
         radUDP = new javax.swing.JRadioButton();
         btn = new javax.swing.JButton();
         txtTrasnmissoes = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
+        jLabel6 = new javax.swing.JLabel();
+        comboEixos = new javax.swing.JComboBox();
+        jLabel7 = new javax.swing.JLabel();
+        comboColor = new javax.swing.JComboBox();
 
         jLabel2.setText("jLabel2");
 
@@ -58,19 +63,24 @@ public class Menu extends javax.swing.JFrame {
 
         jLabel1.setText("IP Sensor");
 
-        edtIPSensor.setText("187.183.5.216");
+        edtIPSensor.setText("192.168.0.101");
+        edtIPSensor.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                edtIPSensorActionPerformed(evt);
+            }
+        });
 
         jLabel3.setText("Porta");
 
-        edtPortaSensor.setText("1001");
+        edtPortaSensor.setText("9000");
 
         jLabel4.setText("IP Atuador");
 
-        edtIPAtuador.setText("187.183.5.216");
+        edtIPAtuador.setText("192.168.0.103");
 
         jLabel5.setText("Porta");
 
-        edtPortaAtuador.setText("1003");
+        edtPortaAtuador.setText("9000");
 
         buttonGroup1.add(radTCP);
         radTCP.setSelected(true);
@@ -93,6 +103,31 @@ public class Menu extends javax.swing.JFrame {
 
         txtTrasnmissoes.setText("0");
 
+        jButton1.setText("jButton1");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        jLabel6.setText("Eixo");
+
+        comboEixos.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Eixo X", "Eixo Y", "Eixo Z" }));
+        comboEixos.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                comboEixosItemStateChanged(evt);
+            }
+        });
+        comboEixos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboEixosActionPerformed(evt);
+            }
+        });
+
+        jLabel7.setText("Cores");
+
+        comboColor.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "R & G", "B & G" }));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -100,23 +135,6 @@ public class Menu extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(81, 81, 81)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel4)
-                            .addComponent(edtIPAtuador, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(38, 38, 38)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(edtPortaAtuador, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel5))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
-                            .addComponent(edtIPSensor, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3)
-                            .addComponent(edtPortaSensor, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(radTCP)
                         .addGap(28, 28, 28)
@@ -127,8 +145,39 @@ public class Menu extends javax.swing.JFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(radUDP)
                                 .addGap(18, 18, 18)
-                                .addComponent(btn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
-                .addGap(99, 99, 99))
+                                .addComponent(btn, javax.swing.GroupLayout.DEFAULT_SIZE, 279, Short.MAX_VALUE))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel4)
+                            .addComponent(edtIPAtuador, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel1)
+                            .addComponent(edtIPSensor, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(38, 38, 38)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(edtPortaAtuador, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(comboColor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel3)
+                                    .addComponent(edtPortaSensor, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel5))
+                                .addGap(62, 62, 62)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(12, 12, 12)
+                                        .addComponent(jLabel7))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(22, 22, 22)
+                                        .addComponent(jLabel6))
+                                    .addComponent(comboEixos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGap(62, 62, 62)))
+                .addGap(69, 69, 69))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButton1)
+                .addGap(150, 150, 150))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -136,19 +185,24 @@ public class Menu extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(jLabel3))
+                    .addComponent(jLabel3)
+                    .addComponent(jLabel6))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(edtIPSensor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(edtPortaSensor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(edtPortaSensor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(comboEixos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(jLabel5))
+                    .addComponent(jLabel5)
+                    .addComponent(jLabel7))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(edtIPAtuador, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(edtPortaAtuador, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(edtIPAtuador, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(edtPortaAtuador, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(comboColor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(radTCP)
@@ -156,7 +210,9 @@ public class Menu extends javax.swing.JFrame {
                     .addComponent(btn))
                 .addGap(18, 18, 18)
                 .addComponent(txtTrasnmissoes)
-                .addContainerGap(102, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
+                .addComponent(jButton1)
+                .addGap(41, 41, 41))
         );
 
         pack();
@@ -169,7 +225,7 @@ public class Menu extends javax.swing.JFrame {
     private void btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActionPerformed
 
         if (btn.getText().equals("Start")) {
-             txtTrasnmissoes.setText( "0" );
+            txtTrasnmissoes.setText("0");
             running = true;
             Runnable run = null;
             if (radTCP.isSelected()) {
@@ -202,32 +258,128 @@ public class Menu extends javax.swing.JFrame {
 
 
     }//GEN-LAST:event_btnActionPerformed
+ 
+
+
+    private void edtIPSensorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_edtIPSensorActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_edtIPSensorActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+
+        TCPClientSocket tcpSocketSensor = new TCPClientSocket("192.168.0.101", 9000);
+        try {
+            Message msg = new Message();
+            msg.type = Message.REQUISICAO;
+            Gson gson = new Gson();
+
+            System.out.println(tcpSocketSensor.requestValue(gson.toJson(msg)));
+        } catch (Exception ex) {
+            Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void comboEixosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboEixosActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_comboEixosActionPerformed
+
+    private void comboEixosItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_comboEixosItemStateChanged
+
+      
+
+
+    }//GEN-LAST:event_comboEixosItemStateChanged
 
     public void startTCP() {
         TCPClientSocket tcpSocketSensor = new TCPClientSocket(edtIPSensor.getText(), Integer.parseInt(edtPortaSensor.getText()));
         TCPClientSocket tcpSocketAtuador = new TCPClientSocket(edtIPAtuador.getText(), Integer.parseInt(edtPortaAtuador.getText()));
+        Gson gson = new Gson();
+
+        int eixoIndex = comboEixos.getSelectedIndex();
+        Message confMsg = new Message();
+        confMsg.type = Message.CONTROLE;
+        confMsg.value = eixoIndex;
+        try {
+            String sensorVal = tcpSocketSensor.requestValue(gson.toJson(confMsg));
+        } catch (IOException ex) {
+            Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
+        }
         try {
             String text = "";
             int erros = 0;
             long start, end;
+            int cor = 0;
             while (running) {
                 start = System.nanoTime();
-                String sensorVal = tcpSocketSensor.requestValue("0");
+                Message msg = new Message();
+
+                if (eixoIndex != comboEixos.getSelectedIndex()) {
+                    eixoIndex = comboEixos.getSelectedIndex();
+                    msg.type = Message.CONTROLE;
+                    msg.value = eixoIndex;
+                } else {
+                    msg.type = Message.REQUISICAO;
+                } 
+                String sensorVal = tcpSocketSensor.requestValue(gson.toJson(msg));
+
                 if (sensorVal != null && sensorVal.trim().length() > 0) {
-                    tcpSocketAtuador.requestValue(sensorVal);
+                    try {
+                        java.lang.reflect.Type listType = new TypeToken<Message<Value>>() {
+                    }.getType();
+                        Message<Value> message = gson.fromJson(sensorVal,listType);
+                        cor = getColor(message.value);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    tcpSocketAtuador.requestValue(String.valueOf(cor));
+
                     end = System.nanoTime();
+
                     text += end - start + "\r\n";
-                    System.out.println((end-start)+"");
                 } else {
                     erros++;
-                }
+                } 
                 int cont = (Integer.parseInt(txtTrasnmissoes.getText()));
                 cont++;
-                txtTrasnmissoes.setText(  cont+"" );
+                txtTrasnmissoes.setText(cont + "");
             }
             save(text + "\r\n\r\n" + erros, "tcp.txt");
         } catch (IOException ex) {
+            ex.printStackTrace();
         }
+    }
+
+    public int getColor(Value valor) {
+        int maxSensorValue = 360;
+        int v = (int) valor.value;
+        if (valor.eixoIndex > 0) {
+            v += 90;
+            maxSensorValue = 180;
+        }else{
+            maxSensorValue = 360;
+        }
+        
+        System.out.println("V:" + v + "  Max:" + maxSensorValue+"  E:"+valor.eixoIndex);
+        if (comboColor.getSelectedIndex() == 0) {
+            return getTrafficlightColorRG(maxSensorValue, v);
+        } else {
+            return getTrafficlightColorBG(maxSensorValue, v);
+        }
+    }
+
+    public int getTrafficlightColorRG(int maxSensorValue, int n) {
+
+        int r = (255 * n) / maxSensorValue;
+        int g = (255 * (maxSensorValue - n)) / maxSensorValue;
+        int b = 0;
+        return new Color(r, g, b).getRGB();
+    }
+
+    public int getTrafficlightColorBG(int maxSensorValue, int n) {
+        int r = 0;
+        int g = (255 * (maxSensorValue - n)) / maxSensorValue;
+        int b = (255 * n) / maxSensorValue;
+        return new Color(r, g, b).getRGB();
     }
 
     public void startUPD() {
@@ -249,7 +401,7 @@ public class Menu extends javax.swing.JFrame {
                 }
                 int cont = (Integer.parseInt(txtTrasnmissoes.getText()));
                 cont++;
-                txtTrasnmissoes.setText(  cont+"" );
+                txtTrasnmissoes.setText(cont + "");
             }
             save(text + "\r\n\r\n" + erros, "upd.txt");
         } catch (Exception e) {
@@ -308,15 +460,20 @@ public class Menu extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btn;
     private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.JComboBox comboColor;
+    private javax.swing.JComboBox comboEixos;
     private javax.swing.JTextField edtIPAtuador;
     private javax.swing.JTextField edtIPSensor;
     private javax.swing.JTextField edtPortaAtuador;
     private javax.swing.JTextField edtPortaSensor;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JRadioButton radTCP;
     private javax.swing.JRadioButton radUDP;
     private javax.swing.JLabel txtTrasnmissoes;

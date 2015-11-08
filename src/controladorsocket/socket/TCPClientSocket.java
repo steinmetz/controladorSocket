@@ -32,9 +32,10 @@ public class TCPClientSocket {
 
             echoSocket = new Socket(serverHostname, serverPort);
             out = new PrintWriter(echoSocket.getOutputStream(), true);
+            
             in = new BufferedReader(new InputStreamReader(
                     echoSocket.getInputStream()));
-
+            echoSocket.setSoTimeout(5000);
             out.println(value);
             receiveMessage = in.readLine();
             out.close();
